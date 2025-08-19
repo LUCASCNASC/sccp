@@ -1,0 +1,400 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Oswald', Arial, sans-serif;
+  background: #181A1B;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  background: #181A1B;
+  border-bottom: 4px solid white;
+  height: 60px;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-right: 1px solid white;
+  height: 100%;
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #222;
+  border: 2px solid #444;
+}
+
+.logo-text {
+  color: #fff;
+  font-size: 1.5em;
+  letter-spacing: 1px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.search-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding-left: 18px;
+  height: 100%;
+}
+
+.autocomplete {
+  position: relative;
+  width: 220px;
+}
+
+.search-input {
+  height: 38px;
+  border: 2px solid #FFD84C;
+  border-radius: 6px;
+  background: #222;
+  color: #fff;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.1em;
+  font-weight: 500;
+  padding: 0 16px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: #FFD84C;
+  opacity: 1;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.search-input:focus {
+  border-color: #fff;
+  background: #181A1B;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  right: 0;
+  background: #222;
+  border: 1.5px solid #FFD84C;
+  border-top: none;
+  max-height: 180px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 2px 8px #0006;
+  display: none;
+}
+
+.autocomplete-list.show {
+  display: block;
+}
+
+.autocomplete-list li {
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.15s, color 0.15s;
+}
+
+.autocomplete-list li:hover,
+.autocomplete-list li.active {
+  background: #FFD84C;
+  color: #181A1B;
+}
+
+.filter-btn {
+  height: 38px;
+  background: #FFD84C;
+  color: #181A1B;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1.04em;
+  padding: 0 18px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  outline: none;
+}
+
+.filter-btn:hover {
+  background: #fff;
+  color: #181A1B;
+  border: 1.5px solid #FFD84C;
+}
+
+.auth-area {
+  display: flex;
+  align-items: center;
+  background: #FFD84C;
+  height: 100%;
+  padding: 0 22px;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 1em;
+}
+
+.btn-login, .btn-register {
+  color: #181A1B;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+.divider {
+  width: 1px;
+  height: 22px;
+  background: #181A1B;
+  margin: 0 8px;
+}
+
+.elenco-title {
+  color: #fff;
+  text-align: center;
+  margin-top: 44px;
+  font-size: 2.2em;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 8px #000a;
+}
+
+/* ----------- CADASTRO NOVO PADRÃO ----------- */
+.cadastro-novo-bg {
+  background: #ededed;
+  min-height: calc(100vh - 60px);
+  width: 100vw;
+  position: absolute;
+  left: 0; top: 60px;
+  z-index: 1;
+}
+
+.cadastro-novo-title {
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 2.7em;
+  font-weight: 700;
+  margin: 36px 0 28px 0;
+  color: #181A1B;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.cadastro-novo-container {
+  background: #363636;
+  max-width: 98vw;
+  width: 820px;
+  margin: 0 auto 0 auto;
+  border-radius: 3px;
+  margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  box-shadow: 0 2px 20px #0004;
+  position: relative;
+  z-index: 2;
+  padding: 0 0 24px 0;
+  min-height: 450px;
+  margin-top: 0;
+}
+
+.cadastro-novo-section-title {
+  color: #FFD84C;
+  font-size: 1.2em;
+  font-family: 'Oswald', Arial, sans-serif;
+  padding: 34px 18px 18px 38px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.cadastro-novo-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 26px;
+  padding: 0 38px 0 38px;
+}
+
+.cadastro-novo-group {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 320px;
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+
+.cadastro-novo-group.short {
+  max-width: 180px;
+  flex-basis: 180px;
+}
+
+.cadastro-novo-form label {
+  color: #fff;
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 3px;
+  letter-spacing: 0.5px;
+}
+
+.cadastro-novo-form input[type="text"],
+.cadastro-novo-form input[type="email"],
+.cadastro-novo-form input[type="password"] {
+  width: 100%;
+  padding: 8px 8px;
+  border-radius: 4px;
+  border: none;
+  margin-bottom: 6px;
+  background: #fff;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.1em;
+}
+
+.cadastro-novo-form input[type="date"] {
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.1em;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  background: #fff;
+}
+
+.cadastro-novo-form select {
+  width: 100%;
+  padding: 8px 6px;
+  border-radius: 4px;
+  border: none;
+  background: #fff;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.1em;
+}
+
+.cadastro-novo-foto {
+  margin-top: 22px;
+  text-align: center;
+  flex-basis: 180px;
+  max-width: 180px;
+}
+.cadastro-novo-foto label {
+  display: block;
+  cursor: pointer;
+}
+.cadastro-novo-foto input[type="file"] {
+  display: none;
+}
+.cadastro-novo-foto .foto-preview {
+  width: 100px;
+  height: 100px;
+  background: #aaa;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 10px auto;
+}
+.cadastro-novo-foto .foto-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #bdbdbd;
+  color: #444;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  margin: 0 auto 10px auto;
+  font-size: 0.97em;
+  font-weight: 400;
+  text-align: center;
+  padding: 5px;
+}
+
+.cadastro-novo-checkbox-row {
+  margin: 14px 0 5px 0;
+  display: flex;
+  align-items: center;
+}
+.cadastro-novo-checkbox-row input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.cadastro-novo-termos {
+  color: #ccc;
+  font-size: 0.95em;
+  margin-bottom: 6px;
+  margin-left: 2px;
+}
+.cadastro-novo-termos a {
+  color: #fff;
+  text-decoration: underline;
+  font-size: 0.95em;
+}
+
+.cadastro-novo-btn {
+  background: #000;
+  color: #fff;
+  border: none;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.16em;
+  font-weight: 700;
+  padding: 10px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 16px;
+  width: 94%;
+  margin-left: 3%;
+  margin-right: 3%;
+  letter-spacing: 1px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cadastro-novo-btn[disabled] {
+  background: #888;
+  color: #ddd;
+  cursor: not-allowed;
+}
+
+.cadastro-novo-btn:hover:enabled {
+  background: #FFD84C;
+  color: #181A1B;
+}
+
+.cadastro-novo-error {
+  color: #FFD84C;
+  font-size: 0.99em;
+  margin-top: 2px;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 900px) {
+  .cadastro-novo-container {
+    width: 99vw;
+    min-width: 0;
+    padding: 0;
+  }
+  .cadastro-novo-form {
+    flex-direction: column;
+    gap: 7px 0;
+    padding: 0 12px 0 12px;
+  }
+  .cadastro-novo-group, .cadastro-novo-group.short, .cadastro-novo-foto {
+    max-width: 100%;
+    flex-basis: 100%;
+  }
+}
