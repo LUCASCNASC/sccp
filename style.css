@@ -31,6 +31,7 @@ body {
   border-radius: 50%;
   background: #222;
   border: 2px solid #444;
+  object-fit: contain;
 }
 
 .logo-text {
@@ -134,7 +135,7 @@ body {
   outline: none;
 }
 
-.filter-btn:hover {
+.filter-btn:hover, .filter-btn:focus {
   background: #fff;
   color: #181A1B;
   border: 1.5px solid #FFD84C;
@@ -174,6 +175,55 @@ body {
   font-weight: 700;
   letter-spacing: 1px;
   text-shadow: 1px 2px 8px #000a;
+  opacity: 0;
+  animation: fadein 0.5s forwards;
+}
+
+@keyframes fadein {
+  to { opacity: 1; }
+}
+
+.elenco-lista {
+  max-width: 700px;
+  margin: 32px auto 0 auto;
+  background: #242424;
+  border-radius: 8px;
+  padding: 18px 30px;
+  color: #fff;
+  box-shadow: 0 2px 12px #0006;
+  opacity: 0;
+  animation: fadein 0.7s 0.1s forwards;
+}
+
+.elenco-lista-title {
+  font-size: 1.22em;
+  color: #FFD84C;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Lista responsiva de jogadores */
+.elenco-lista ul {
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px 24px;
+  max-height: 480px;
+  overflow-y: auto;
+  list-style: none;
+}
+
+.elenco-lista li {
+  font-size: 1.07em;
+  padding: 6px 0;
+  letter-spacing: 0.5px;
+  color: #fff;
+  background: #232323;
+  border-radius: 4px;
+  text-align: center;
 }
 
 /* ----------- CADASTRO NOVO PADRÃO ----------- */
@@ -184,6 +234,7 @@ body {
   position: absolute;
   left: 0; top: 60px;
   z-index: 1;
+  animation: fadein 0.5s;
 }
 
 .cadastro-novo-title {
@@ -237,6 +288,7 @@ body {
   flex-basis: 320px;
   flex-grow: 1;
   margin-bottom: 0;
+  position: relative;
 }
 
 .cadastro-novo-group.short {
@@ -265,13 +317,16 @@ body {
   font-size: 1.1em;
 }
 
-.cadastro-novo-form input[type="date"] {
-  font-family: 'Oswald', Arial, sans-serif;
-  font-size: 1.1em;
-  padding: 8px;
-  border-radius: 4px;
-  border: none;
-  background: #fff;
+.cadastro-novo-form input[type="text"]:focus,
+.cadastro-novo-form input[type="email"]:focus,
+.cadastro-novo-form input[type="password"]:focus,
+.cadastro-novo-form select:focus {
+  outline: 2px solid #FFD84C;
+}
+
+.cadastro-novo-form input.error,
+.cadastro-novo-form select.error {
+  border: 2px solid #ff5a36 !important;
 }
 
 .cadastro-novo-form select {
@@ -368,7 +423,7 @@ body {
   cursor: not-allowed;
 }
 
-.cadastro-novo-btn:hover:enabled {
+.cadastro-novo-btn:hover:enabled, .cadastro-novo-btn:focus:enabled {
   background: #FFD84C;
   color: #181A1B;
 }
@@ -397,4 +452,284 @@ body {
     max-width: 100%;
     flex-basis: 100%;
   }
+  .search-area {
+    min-width: 0;
+    padding-left: 4px;
+    gap: 2px;
+  }
+  .autocomplete {
+    width: 110px;
+  }
+  .filter-btn {
+    font-size: 0.98em;
+    padding: 0 8px;
+    min-width: 70px;
+  }
+  .elenco-lista {
+    width: 95vw;
+    padding: 10px 6vw;
+  }
+}
+
+/* Mobile Topbar improvement */
+@media (max-width: 600px) {
+  .topbar {
+    flex-direction: column;
+    height: auto;
+    padding-bottom: 6px;
+  }
+  .logo-area {
+    padding: 8px;
+    border: none;
+  }
+  .search-area {
+    width: 100%;
+    margin-top: 3px;
+    padding-left: 0;
+  }
+  .auth-area {
+    width: 100%;
+    padding: 6px;
+    font-size: 0.98em;
+    justify-content: flex-end;
+  }
+  .elenco-lista ul {
+    grid-template-columns: 1fr;
+    max-height: 350px;
+  }
+}
+
+/* --- Login Screen --- */
+.login-bg {
+  background: #ededed;
+  min-height: calc(100vh - 60px);
+  width: 100vw;
+  position: absolute;
+  left: 0; top: 60px;
+  z-index: 1;
+  animation: fadein 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-title {
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 2.2em;
+  font-weight: 700;
+  margin: 36px 0 28px 0;
+  color: #181A1B;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.login-container {
+  background: #242424;
+  border-radius: 8px;
+  display: flex;
+  width: 850px;
+  max-width: 98vw;
+  min-height: 320px;
+  box-shadow: 0 2px 16px #0007;
+  justify-content: space-between;
+  padding: 0;
+  overflow: hidden;
+}
+
+.login-left, .login-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px 24px 28px;
+  min-width: 240px;
+}
+
+.login-left {
+  border-right: 2px solid #181A1B;
+  background: url('corinthians-logo.png') no-repeat 95% 90%/120px auto;
+  background-blend-mode: luminosity;
+}
+
+.login-section-title {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #bfbfbf;
+  background: #444;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+
+.login-form label {
+  color: #FFD84C;
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+}
+
+.login-form input[type="email"], .login-form input[type="password"] {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 3px;
+  border: none;
+  margin-bottom: 12px;
+  background: #fff;
+  color: #181A1B;
+  font-size: 1.09em;
+  font-family: 'Oswald', Arial, sans-serif;
+}
+
+.login-forgot {
+  color: #FFD84C;
+  font-size: 0.97em;
+  text-decoration: underline;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+
+.login-btn {
+  background: #181A1B;
+  color: #FFD84C;
+  border: none;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.18em;
+  font-weight: 700;
+  padding: 8px 0;
+  border-radius: 3px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  transition: background 0.2s, color 0.2s;
+}
+.login-btn:hover, .login-btn:focus {
+  background: #FFD84C;
+  color: #181A1B;
+}
+
+.login-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #242424;
+}
+
+.login-desc {
+  color: #FFD84C;
+  font-size: 1.08em;
+  font-weight: 500;
+  margin-bottom: 18px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.cadastro-btn {
+  background: #FFD84C;
+  color: #181A1B;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.11em;
+  font-weight: 700;
+  border: none;
+  border-radius: 3px;
+  padding: 7px 28px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background 0.2s, color 0.2s;
+}
+.cadastro-btn:hover, .cadastro-btn:focus {
+  background: #fff;
+  color: #181A1B;
+}
+
+.login-ou {
+  color: #bfbfbf;
+  background: none;
+  font-size: 1em;
+  font-weight: 700;
+  margin: 8px 0 8px 0;
+  text-align: center;
+}
+
+.login-social {
+  width: 90%;
+  max-width: 260px;
+  margin: 7px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.02em;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 9px 3px;
+  transition: background 0.2s;
+}
+.login-social img {
+  width: 21px;
+  height: 21px;
+}
+.login-social.fb {
+  background: #3b5998;
+  color: #fff;
+}
+.login-social.fb:hover { background: #26396b;}
+.login-social.google {
+  background: #fff;
+  color: #181A1B;
+  border: 1.5px solid #FFD84C;
+}
+.login-social.google:hover {
+  background: #FFD84C;
+  color: #181A1B;
+}
+
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+    width: 98vw;
+    min-width: 0;
+    padding: 0;
+  }
+  .login-left, .login-right {
+    border: none;
+    min-width: 0;
+    width: 100%;
+    padding: 22px 6vw 22px 6vw;
+  }
+  .login-left {
+    background-size: 80px auto;
+    background-position: 95% 95%;
+  }
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 50px;
+  transform: translateX(-50%);
+  background: #181A1B;
+  color: #FFD84C;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-size: 1.08em;
+  padding: 14px 32px;
+  border-radius: 30px;
+  box-shadow: 0 2px 16px #0009;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 100;
+  min-width: 180px;
+  text-align: center;
+  transition: opacity 0.5s;
+}
+
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
 }
