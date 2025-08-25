@@ -1,7 +1,38 @@
-// Gera os anos de 1910 até 2025
-const years = [];
-for (let y = 1910; y <= 2025; y++) years.push(y.toString());
+// Busca os anos disponíveis da API
+async function fetchYearsFromAPI() {
+  try {
+    const resp = await fetch("http://localhost:3001/api/elencos");
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return data;
+  } catch {
+    return [];
+  }
+}
 
+// Busca elenco de um ano via API
+async function fetchElencoFromAPI(ano) {
+  try {
+    const resp = await fetch(`http://localhost:3001/api/elencos/${ano}`);
+    if (!resp.ok) return [];
+    const data = await resp.json();
+    return data.jogadores || [];
+  } catch {
+    return [];
+  }
+}
+
+// Gera os anos de 1910 até 2025 (fallback caso API falhe)
+let years = [];
+fetchYearsFromAPI().then(apiYears => {
+  if (apiYears.length) {
+    years = apiYears;
+  } else {
+    for (let y = 1910; y <= 2025; y++) years.push(y.toString());
+  }
+});
+
+// Elementos DOM
 const yearInput = document.getElementById("year-input");
 const autocompleteList = document.getElementById("autocomplete-list");
 const mainContent = document.getElementById("main-content");
@@ -105,16 +136,16 @@ function showToast(msg, duration = 2500) {
 }
 
 // Botão FILTRAR
-document.getElementById("filter-btn").addEventListener("click", function() {
+document.getElementById("filter-btn").addEventListener("click", async function() {
   const selectedYear = yearInput.value;
   if (years.includes(selectedYear)) {
-    showElencoTitle(selectedYear);
+    await showElencoTitle(selectedYear);
   } else {
     showToast("Ano inválido. Por favor, escolha um ano da lista.");
   }
 });
 
-function showElencoTitle(ano) {
+async function showElencoTitle(ano) {
   mainContent.innerHTML = "";
   // Título
   const titulo = document.createElement('h1');
@@ -122,14 +153,16 @@ function showElencoTitle(ano) {
   titulo.textContent = `Elenco do timão na temporada de ${ano}`;
   mainContent.appendChild(titulo);
 
-  // Lista de jogadores
-  if (ELENCOS[ano]) {
-    const elencoDiv = document.createElement('div');
-    elencoDiv.className = "elenco-lista";
-    elencoDiv.innerHTML = `<div class="elenco-lista-title">Jogadores (${ELENCOS[ano].length}):</div>`;
+  // Busca do backend
+  const jogadores = await fetchElencoFromAPI(ano);
+
+  const elencoDiv = document.createElement('div');
+  elencoDiv.className = "elenco-lista";
+  if (jogadores && jogadores.length > 0) {
+    elencoDiv.innerHTML = `<div class="elenco-lista-title">Jogadores (${jogadores.length}):</div>`;
     const lista = document.createElement("ul");
     lista.setAttribute("role", "list");
-    ELENCOS[ano].forEach(j => {
+    jogadores.forEach(j => {
       const li = document.createElement("li");
       li.textContent = j;
       lista.appendChild(li);
@@ -137,8 +170,6 @@ function showElencoTitle(ano) {
     elencoDiv.appendChild(lista);
     mainContent.appendChild(elencoDiv);
   } else {
-    const elencoDiv = document.createElement('div');
-    elencoDiv.className = "elenco-lista";
     elencoDiv.innerHTML = `<div class="elenco-lista-title">Sem elenco cadastrado para esse ano.</div>`;
     mainContent.appendChild(elencoDiv);
   }
@@ -483,7 +514,7 @@ function renderLogin() {
     <div class="login-bg">
       <div class="login-title">ELENCOS CORINTHIANS - LOGIN / CADASTRO</div>
       <div class="login-container">
-        <div class="login-left">
+        <div class="login-left" style="background:none;">
           <div class="login-section-title">JÁ SOU CADASTRADO</div>
           <form class="login-form" id="loginForm" autocomplete="off">
             <label for="login-email">E-MAIL</label>
