@@ -239,3 +239,62 @@ function initSPA() {
 }
 
 initSPA();
+
+function renderLogin() {
+  document.getElementById("search-area").style.display = ""; // mantém a barra de pesquisa
+  mainContent.innerHTML = `
+    <h1 class="login-title">ELENCOS CORINTHIANS - LOGIN / CADASTRO</h1>
+    <div class="login-cadastro-box">
+      <div class="login-col">
+        <div class="login-col-title">JÁ SOU CADASTRADO</div>
+        <form class="login-form" id="login-form">
+          <label for="login-email">E-MAIL</label>
+          <input type="email" id="login-email" name="login-email" placeholder="seu email" autocomplete="email" required>
+          <label for="login-password">SENHA</label>
+          <input type="password" id="login-password" name="login-password" placeholder="sua senha" autocomplete="current-password" required>
+          <a href="#" class="forgot-link">Não lembro minha senha</a>
+          <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+      </div>
+      <div class="cadastro-col">
+        <div class="cadastro-col-title">AINDA NÃO ME CADASTREI</div>
+        <p>Faça parte do Elencos Corinthians e acompanhe o CORINTHIANS mais de perto.</p>
+        <button class="cadastro-btn-box" id="cadastro-btn-box">CADASTRO</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("login-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    showToast("Login enviado! (exemplo de integração)");
+  });
+
+  document.getElementById("cadastro-btn-box").addEventListener("click", function() {
+    navigate("/cadastro");
+  });
+}
+
+function renderCadastro() {
+  document.getElementById("search-area").style.display = ""; // mantém a barra de pesquisa
+  mainContent.innerHTML = `
+    <div class="cadastro-container">
+      <h1 class="cadastro-title">Cadastre-se no Elencos Corinthians</h1>
+      <form class="cadastro-form" id="cadastro-form">
+        <label for="nome">Nome completo:</label>
+        <input type="text" id="nome" name="nome" required autocomplete="name">
+
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required autocomplete="new-password">
+
+        <button type="submit" class="cadastro-btn">Cadastrar</button>
+      </form>
+    </div>
+  `;
+  document.getElementById("cadastro-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    showToast("Cadastro enviado! (exemplo de integração)");
+  });
+}

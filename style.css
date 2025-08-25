@@ -167,3 +167,194 @@ body {
   opacity: 1;
   pointer-events: all;
 }
+
+/* ...demais estilos... */
+
+/* Breadcrumb */
+.breadcrumb {
+  margin: 32px auto 8px auto;
+  max-width: 700px;
+  font-size: 1em;
+  color: #222;
+  background: #FFD54F;
+  border-radius: 4px;
+  padding: 5px 16px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* Título login/cadastro */
+.login-title {
+  color: white;
+  font-size: 2.1em;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-weight: 700;
+  margin: 0 auto 24px auto;
+  max-width: 700px;
+  letter-spacing: 2px;
+}
+
+/* Box principal */
+.login-cadastro-box {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  max-width: 900px;
+  margin: 0 auto 56px auto;
+  background: #333;
+  border-radius: 14px;
+  padding: 38px 32px 38px 32px;
+  color: #FFD54F;
+  position: relative;
+}
+
+.login-col, .cadastro-col {
+  flex: 1 1 0;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.login-col-title, .cadastro-col-title {
+  background: #555;
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 4px 4px 0 0;
+  padding: 6px 12px;
+  margin-bottom: 20px;
+  width: 100%;
+  letter-spacing: 1px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.login-form label {
+  font-size: 1em;
+  color: #FFD54F;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.login-form input {
+  background: #181A1B;
+  color: #fff;
+  border: 2px solid #FFD54F;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 1em;
+  outline: none;
+}
+
+.forgot-link {
+  color: #FFD54F;
+  font-size: 0.95em;
+  margin-bottom: 10px;
+  text-decoration: underline;
+  align-self: flex-start;
+}
+
+.login-btn {
+  background: #222;
+  color: #FFD54F;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 10px 0;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  transition: background 0.2s;
+}
+.login-btn:hover {
+  background: #FFD54F;
+  color: #222;
+}
+
+/* Coluna Cadastro */
+.cadastro-col {
+  align-items: center;
+  text-align: center;
+}
+
+.cadastro-col-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.cadastro-btn-box {
+  background: #222;
+  color: #FFD54F;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 12px 0;
+  cursor: pointer;
+  width: 140px;
+  transition: background 0.2s;
+  margin-top: 16px;
+  margin-bottom: 14px;
+}
+.cadastro-btn-box:hover {
+  background: #FFD54F;
+  color: #222;
+}
+
+.ou-divider {
+  margin: 12px 0;
+  color: #FFD54F;
+  font-weight: bold;
+}
+
+.social-btn {
+  display: block;
+  width: 210px;
+  margin: 8px auto;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.facebook-btn {
+  background: #4267B2;
+  color: #fff;
+}
+.facebook-btn:hover {
+  background: #324d96;
+}
+
+.google-btn {
+  background: #fff;
+  color: #222;
+  border: 1px solid #FFD54F;
+}
+.google-btn:hover {
+  background: #FFD54F;
+  color: #222;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .login-cadastro-box {
+    flex-direction: column;
+    gap: 0;
+    padding: 32px 8px;
+  }
+  .login-col, .cadastro-col {
+    padding: 0;
+    width: 100%;
+    align-items: center;
+  }
+}
