@@ -6,41 +6,49 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Configuração do banco de dados
 const pool = new Pool({
-  user: 'SEU_USUARIO',
+  user: 'postgres',
   host: 'localhost',
-  database: 'SEU_BANCO',
-  password: 'SUA_SENHA',
+  database: 'postgres',
+  password: '@Lcn1998',
   port: 5432,
 });
 
-// Rota para buscar elencos de um ano
-app.get('/api/elencos/:ano', async (req, res) => {
-  const { ano } = req.params;
+// Retorna todos os anos (temporadas) disponíveis
+app.get('/api/elencos', async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT jogador FROM elencos WHERE ano = $1 ORDER BY jogador',
-      [ano]
-    );
-    res.json({
-      ano,
-      jogadores: result.rows.map(row => row.jogador)
-    });
+    const result = await pool.query('SELECT name_temporada FROM temporadas ORDER BY name_temporada');
+    res.json(result.rows.map(row => row.name_temporada));
   } catch (err) {
-    res.status(500).json({ error: 'Erro ao buscar elenco.' });
+    res.status(500).json({ error: 'Erro ao buscar anos.' });
   }
 });
 
-// Rota para todos os anos disponíveis
-app.get('/api/elencos', async (req, res) => {
+// Retorna jogadores de uma temporada específica
+app.get('/api/elencos/:ano', async (req, res) => {
+  const { ano } = req.params;
   try {
-    const result = await pool.query(
-      'SELECT DISTINCT ano FROM elencos ORDER BY ano'
+    // Busca o id da temporada pelo nome
+    const temporadaRes = await pool.query(
+      'SELECT id FROM temporadas WHERE name_temporada = $1',
+      [ano]
     );
-    res.json(result.rows.map(row => row.ano));
+    if (temporadaRes.rows.length === 0) {
+      return res.json({ ano, jogadores: [] });
+    }
+    const temporadaId = temporadaRes.rows[0].id;
+
+    // Busca jogadores pelo id da temporada
+    const jogadoresRes = await pool.query(
+      'SELECT nome_jogador FROM jogadores WHERE id_temporadas = $1 ORDER BY nome_jogador',
+      [temporadaId]
+    );
+    res.json({
+      ano,
+      jogadores: jogadoresRes.rows.map(row => row.nome_jogador)
+    });
   } catch (err) {
-    res.status(500).json({ error: 'Erro ao buscar anos.' });
+    res.status(500).json({ error: 'Erro ao buscar elenco.' });
   }
 });
 
