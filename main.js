@@ -22,26 +22,19 @@ async function fetchElencoFromAPI(ano) {
   }
 }
 
+// Gera os anos de 1910 até 2025 (fallback caso API falhe)
 let years = [];
-let recentYears = [];
-
-// Busca e ordena anos decrescentemente
 fetchYearsFromAPI().then(apiYears => {
   if (apiYears.length) {
-    years = apiYears.sort((a, b) => b - a); // decrescente
-    recentYears = years.slice(0, 10); // 10 mais recentes
+    years = apiYears;
   } else {
     for (let y = 1910; y <= 2025; y++) years.push(y.toString());
-    years = years.sort((a, b) => b - a);
-    recentYears = years.slice(0, 10);
   }
-  renderRecentYearsList();
 });
 
 const yearInput = document.getElementById("year-input");
 const autocompleteList = document.getElementById("autocomplete-list");
 const mainContent = document.getElementById("main-content");
-const recentYearsList = document.getElementById("recent-years-list");
 const toast = document.getElementById("toast");
 let currentFocus = -1;
 
@@ -151,25 +144,6 @@ document.getElementById("filter-btn").addEventListener("click", async function()
   }
 });
 
-// Função para exibir os 10 anos mais recentes
-function renderRecentYearsList() {
-  if (!recentYearsList) return;
-  recentYearsList.innerHTML = "";
-  const ul = document.createElement("ul");
-  ul.className = "years-list";
-  recentYears.forEach(year => {
-    const li = document.createElement("li");
-    li.textContent = year;
-    li.className = "year-item";
-    li.addEventListener("click", async () => {
-      yearInput.value = year;
-      await showElencoTitle(year);
-    });
-    ul.appendChild(li);
-  });
-  recentYearsList.appendChild(ul);
-}
-
 async function showElencoTitle(ano) {
   mainContent.innerHTML = "";
   // Título
@@ -205,7 +179,6 @@ function renderHome() {
   document.getElementById("search-area").style.display = "";
   mainContent.innerHTML = "";
   mainContent.style.animation = "fadein 0.5s";
-  renderRecentYearsList();
 }
 
 function renderCadastro() {
