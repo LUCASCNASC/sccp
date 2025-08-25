@@ -16,10 +16,10 @@ const pool = new Pool({
   port: process.env.PG_PORT,
 });
 
-// Rota para buscar todos os anos disponíveis
+// Rota para buscar todos os anos disponíveis (em ordem decrescente)
 app.get('/api/elencos', async (req, res) => {
   try {
-    const result = await pool.query('SELECT name_temporada FROM temporadas ORDER BY name_temporada');
+    const result = await pool.query('SELECT name_temporada FROM temporadas ORDER BY name_temporada DESC');
     res.json(result.rows.map(row => row.name_temporada));
   } catch (err) {
     res.status(500).json({ error: 'Erro ao buscar anos.' });
