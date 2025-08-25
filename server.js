@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
@@ -6,15 +7,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Configuração do banco de dados usando variáveis do .env
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'postgres',
-  password: '@Lcn1998',
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
 });
 
-// Retorna todos os anos (temporadas) disponíveis
+// Rota para buscar todos os anos disponíveis
 app.get('/api/elencos', async (req, res) => {
   try {
     const result = await pool.query('SELECT name_temporada FROM temporadas ORDER BY name_temporada');
@@ -24,7 +26,7 @@ app.get('/api/elencos', async (req, res) => {
   }
 });
 
-// Retorna jogadores de uma temporada específica
+// Rota para buscar jogadores de uma temporada específica
 app.get('/api/elencos/:ano', async (req, res) => {
   const { ano } = req.params;
   try {
