@@ -358,3 +358,123 @@ body {
     align-items: center;
   }
 }
+
+.cadastro-title {
+  color: white;
+  font-size: 2.1em;
+  font-family: 'Oswald', Arial, sans-serif;
+  font-weight: 700;
+  margin: 32px auto 24px auto;
+  max-width: 700px;
+  letter-spacing: 2px;
+  text-align: left;
+}
+
+.cadastro-container {
+  max-width: 900px;
+  margin: 0 auto 56px auto;
+  background: #333;
+  border-radius: 14px;
+  padding: 38px 32px;
+  color: #FFD54F;
+  box-sizing: border-box;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-row {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 0px;
+  flex-wrap: wrap;
+}
+
+.form-col {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+}
+
+.cadastro-form label {
+  font-size: 1em;
+  color: #FFD54F;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.cadastro-form input,
+.cadastro-form select {
+  background: #181A1B;
+  color: #fff;
+  border: 2px solid #FFD54F;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 1em;
+  outline: none;
+}
+
+.file-col {
+  align-items: flex-start;
+}
+
+.foto-preview {
+  margin-top: 6px;
+  width: 140px;
+  height: 120px;
+  background: #222;
+  color: #FFD54F;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.95em;
+  cursor: pointer;
+  border: 1px solid #FFD54F;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.98em;
+  color: #FFD54F;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+.form-info {
+  color: #ccc;
+  font-size: 0.95em;
+  margin-top: 8px;
+}
+
+.cadastro-btn-full {
+  background: #000;
+  color: #FFD54F;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.08em;
+  font-weight: bold;
+  padding: 15px 0;
+  cursor: pointer;
+  margin-top: 28px;
+  width: 100%;
+  transition: background 0.2s;
+  letter-spacing: 1px;
+}
+.cadastro-btn-full:hover {
+  background: #FFD54F;
+  color: #222;
+}
+
+@media (max-width: 900px) {
+  .cadastro-container { padding: 18px 4px; }
+  .form-row { flex-direction: column; gap: 0; }
+  .form-col { min-width: unset; }
+}

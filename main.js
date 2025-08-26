@@ -298,3 +298,101 @@ function renderCadastro() {
     showToast("Cadastro enviado! (exemplo de integração)");
   });
 }
+
+function renderCadastro() {
+  document.getElementById("search-area").style.display = ""; // mantém a barra de pesquisa
+
+  mainContent.innerHTML = `
+    <h1 class="cadastro-title">CADASTRE-SE NO ELENCOS CORINTHIANS</h1>
+    <div class="cadastro-container">
+      <form class="cadastro-form" id="cadastro-form" autocomplete="off">
+        <div class="form-row">
+          <div class="form-col">
+            <label for="nome">NOME COMPLETO</label>
+            <input type="text" id="nome" name="nome" required placeholder="Nome completo" autocomplete="name">
+          </div>
+          <div class="form-col">
+            <label for="nascimento">DATA DE NASCIMENTO</label>
+            <input type="text" id="nascimento" name="nascimento" placeholder="dd/mm/aaaa">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label for="email">E-MAIL</label>
+            <input type="email" id="email" name="email" required placeholder="nome@email.com" autocomplete="email">
+          </div>
+          <div class="form-col">
+            <label for="genero">GÊNERO:</label>
+            <select id="genero" name="genero">
+              <option value="">Selecione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Outro</option>
+              <option value="N">Prefiro não informar</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label for="email-confirm">CONFIRMAR E-MAIL</label>
+            <input type="email" id="email-confirm" name="email-confirm" required placeholder="nome@email.com">
+          </div>
+          <div class="form-col file-col">
+            <label for="foto">FOTO</label>
+            <input type="file" id="foto" name="foto" accept="image/*">
+            <div class="foto-preview" id="foto-preview">CLIQUE AQUI PARA ADICIONAR UMA FOTO</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label for="apelido">APELIDO</label>
+            <input type="text" id="apelido" name="apelido" placeholder="Apelido">
+          </div>
+          <div class="form-col">
+            <label for="cidade">CIDADE</label>
+            <input type="text" id="cidade" name="cidade" placeholder="Cidade">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-col">
+            <label for="senha">SENHA</label>
+            <input type="password" id="senha" name="senha" required placeholder="Senha" autocomplete="new-password">
+          </div>
+          <div class="form-col">
+            <label for="senha-confirm">CONFIRMAR SENHA</label>
+            <input type="password" id="senha-confirm" name="senha-confirm" required placeholder="Confirmar senha" autocomplete="new-password">
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="novidades" name="novidades" checked>
+            QUERO RECEBER AS NOTÍCIAS DO CORINTHIANS E NOVIDADES DO ELENCOS CORINTHIANS POR EMAIL.
+          </label>
+        </div>
+        <div class="form-row">
+          <small class="form-info">Site protegido pelo reCAPTCHA e esses <a href="#">Termos</a> e <a href="#">Política</a> do Google se aplicam.</small>
+        </div>
+        <button type="submit" class="cadastro-btn-full">CADASTRAR NO ELENCOS CORINTHIANS</button>
+      </form>
+    </div>
+  `;
+
+  // Preview foto
+  const fotoInput = document.getElementById("foto");
+  const fotoPreview = document.getElementById("foto-preview");
+  fotoInput?.addEventListener("change", function() {
+    if (this.files && this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        fotoPreview.style.background = `url('${e.target.result}') center/cover no-repeat`;
+        fotoPreview.textContent = "";
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+
+  document.getElementById("cadastro-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    showToast("Cadastro enviado! (exemplo de integração)");
+  });
+}
