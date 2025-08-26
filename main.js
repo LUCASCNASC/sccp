@@ -396,3 +396,25 @@ function renderCadastro() {
     showToast("Cadastro enviado! (exemplo de integração)");
   });
 }
+
+document.getElementById("cadastro-form").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  const dados = {
+    nome: document.getElementById("nome").value,
+    data_nascimento: document.getElementById("nascimento").value,
+    genero: document.getElementById("genero").value,
+    email: document.getElementById("email").value,
+    apelido: document.getElementById("apelido").value,
+    cidade: document.getElementById("cidade").value,
+    senha: document.getElementById("senha").value,
+    foto_url: "", // implementar upload depois se quiser
+    receber_novidades: document.getElementById("novidades").checked
+  };
+  const resp = await fetch("http://localhost:3001/api/usuarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dados)
+  });
+  const res = await resp.json();
+  showToast(res.message || res.error);
+});

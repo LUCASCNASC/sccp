@@ -58,3 +58,47 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`);
 });
+
+const bcrypt = require('bcrypt');
+
+const bcrypt = require('bcrypt');
+
+// Endpoint para cadastrar usuário
+app.post('/api/usuarios', async (req, res) => {
+  const {
+    nome, data_nascimento, genero, email, apelido, cidade,
+    senha, foto_url, receber_novidades
+  } = req.body;
+
+  if (!nome || !email || !senha) {
+    return res.status(400).json({ error: 'Nome, e-mail e senha são obrigatórios.' });
+  }
+
+  try {
+    const senhaHash = await bcrypt.hash(senha, 12);
+
+    await pool.query(`
+      INSERT INTO usuarios (
+        nome, data_nascimento, genero, email, apelido, cidade,
+        senha_hash, foto_url, receber_novidades
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    `, [
+      nome,
+      data_nascimento ? new Date(data_nascimento.split('/').reverse().join('-')) : null,
+      genero || null,
+      email,
+      apelido || null,
+      cidade || null,
+      senhaHash,
+      foto_url || null,
+      receber_novidades !== undefined ? receber_novidades : true
+    ]);
+
+    res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+  } catch (err) {
+    if (err.code === '23505') { // email duplicado
+      return res.status(400).json({ error: 'E-mail já cadastrado.' });
+    }
+    res.status(500).json({ error: 'Erro ao cadastrar usuário.' });
+  }
+});
