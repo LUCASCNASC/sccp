@@ -59,9 +59,6 @@ app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`);
 });
 
-const bcrypt = require('bcrypt');
-
-const bcrypt = require('bcrypt');
 
 // Endpoint para cadastrar usuário
 app.post('/api/usuarios', async (req, res) => {
