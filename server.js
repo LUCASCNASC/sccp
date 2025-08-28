@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+// const bcrypt = require('bcrypt'); // Lembre de instalar e descomentar se usar cadastro de usuário!
 
 const app = express();
 app.use(cors());
@@ -26,7 +27,7 @@ app.get('/api/elencos', async (req, res) => {
   }
 });
 
-// Rota para buscar jogadores de uma temporada específica
+// Rota para buscar jogadores de uma temporada específica agrupados por posição
 app.get('/api/elencos/:ano', async (req, res) => {
   const { ano } = req.params;
   try {
@@ -36,18 +37,29 @@ app.get('/api/elencos/:ano', async (req, res) => {
       [ano]
     );
     if (temporadaRes.rows.length === 0) {
-      return res.json({ ano, jogadores: [] });
+      return res.json({ ano, elenco: {} });
     }
     const temporadaId = temporadaRes.rows[0].id;
 
-    // Busca jogadores pelo id da temporada
-    const jogadoresRes = await pool.query(
-      'SELECT nome_jogador FROM jogadores WHERE id_temporadas = $1 ORDER BY nome_jogador',
-      [temporadaId]
-    );
+    // Busca jogadores com suas posições
+    const jogadoresRes = await pool.query(`
+      SELECT j.nome_jogador, p.name_posicao
+      FROM jogadores j
+      JOIN posicao_jogador p ON j.id_posicao_jogador = p.id
+      WHERE j.id_temporadas = $1
+      ORDER BY p.id, j.nome_jogador
+    `, [temporadaId]);
+
+    // Agrupa por posição
+    const elenco = {};
+    jogadoresRes.rows.forEach(j => {
+      if (!elenco[j.name_posicao]) elenco[j.name_posicao] = [];
+      elenco[j.name_posicao].push(j.nome_jogador);
+    });
+
     res.json({
       ano,
-      jogadores: jogadoresRes.rows.map(row => row.nome_jogador)
+      elenco
     });
   } catch (err) {
     res.status(500).json({ error: 'Erro ao buscar elenco.' });
@@ -58,7 +70,6 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`API rodando em http://localhost:${PORT}`);
 });
-
 
 // Endpoint para cadastrar usuário
 app.post('/api/usuarios', async (req, res) => {
@@ -72,7 +83,7 @@ app.post('/api/usuarios', async (req, res) => {
   }
 
   try {
-    const senhaHash = await bcrypt.hash(senha, 12);
+    // const senhaHash = await bcrypt.hash(senha, 12);
 
     await pool.query(`
       INSERT INTO usuarios (
@@ -86,7 +97,7 @@ app.post('/api/usuarios', async (req, res) => {
       email,
       apelido || null,
       cidade || null,
-      senhaHash,
+      senha, // Troque para senhaHash se usar bcrypt!
       foto_url || null,
       receber_novidades !== undefined ? receber_novidades : true
     ]);

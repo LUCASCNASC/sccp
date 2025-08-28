@@ -10,15 +10,15 @@ async function fetchYearsFromAPI() {
   }
 }
 
-// Busca elenco de um ano via API
+// Busca elenco de um ano via API (agora retorna agrupado por posição)
 async function fetchElencoFromAPI(ano) {
   try {
     const resp = await fetch(`http://localhost:3001/api/elencos/${ano}`);
-    if (!resp.ok) return [];
+    if (!resp.ok) return {};
     const data = await resp.json();
-    return data.jogadores || [];
+    return data || {};
   } catch {
-    return [];
+    return {};
   }
 }
 
@@ -144,6 +144,7 @@ document.getElementById("filter-btn").addEventListener("click", async function()
   }
 });
 
+// Nova função showElencoTitle para exibir por grupos de posição
 async function showElencoTitle(ano) {
   mainContent.innerHTML = "";
   // Título
@@ -152,26 +153,46 @@ async function showElencoTitle(ano) {
   titulo.textContent = `Elenco do timão na temporada de ${ano}`;
   mainContent.appendChild(titulo);
 
-  // Busca do backend
-  const jogadores = await fetchElencoFromAPI(ano);
+  // Busca do backend (agora vem agrupado)
+  const elencoData = await fetchElencoFromAPI(ano);
+  const elenco = elencoData.elenco || {};
+
+  // Ordem fixa das posições
+  const posicoesOrdem = [
+    "Goleiro",
+    "Zagueiro",
+    "Lateral Direito",
+    "Lateral Esquerdo",
+    "Meio Campo",
+    "Atacante"
+  ];
 
   const elencoDiv = document.createElement('div');
   elencoDiv.className = "elenco-lista";
-  if (jogadores && jogadores.length > 0) {
-    elencoDiv.innerHTML = `<div class="elenco-lista-title">Jogadores (${jogadores.length}):</div>`;
-    const lista = document.createElement("ul");
-    lista.setAttribute("role", "list");
-    jogadores.forEach(j => {
-      const li = document.createElement("li");
-      li.textContent = j;
-      lista.appendChild(li);
-    });
-    elencoDiv.appendChild(lista);
-    mainContent.appendChild(elencoDiv);
-  } else {
+
+  let temJogador = false;
+
+  posicoesOrdem.forEach(posicao => {
+    if (elenco[posicao] && elenco[posicao].length > 0) {
+      temJogador = true;
+      const grupo = document.createElement("div");
+      grupo.style.marginBottom = "20px";
+      grupo.innerHTML = `<div class="elenco-lista-title">${posicao}${posicao !== "Goleiro" ? "s" : "s"} (${elenco[posicao].length}):</div>`;
+      const lista = document.createElement("ul");
+      elenco[posicao].forEach(nome => {
+        const li = document.createElement("li");
+        li.textContent = nome;
+        lista.appendChild(li);
+      });
+      grupo.appendChild(lista);
+      elencoDiv.appendChild(grupo);
+    }
+  });
+
+  if (!temJogador) {
     elencoDiv.innerHTML = `<div class="elenco-lista-title">Sem elenco cadastrado para esse ano.</div>`;
-    mainContent.appendChild(elencoDiv);
   }
+  mainContent.appendChild(elencoDiv);
 }
 
 // SPA / ROTEAMENTO
@@ -179,124 +200,6 @@ function renderHome() {
   document.getElementById("search-area").style.display = "";
   mainContent.innerHTML = "";
   mainContent.style.animation = "fadein 0.5s";
-}
-
-function renderCadastro() {
-  document.getElementById("search-area").style.display = ""; // mantem visível
-  mainContent.innerHTML = `<div>Cadastro de usuário (exemplo, pode ser expandido)</div>`;
-}
-
-function renderLogin() {
-  document.getElementById("search-area").style.display = ""; // mantem visível
-  mainContent.innerHTML = `<div>Login de usuário (exemplo, pode ser expandido)</div>`;
-}
-
-// Roteamento SPA
-function navigate(path, addToHistory=true) {
-  if (path === "/" || path === "") {
-    renderHome();
-  } else if (path === "/cadastro") {
-    renderCadastro();
-  } else if (path === "/login") {
-    renderLogin();
-  }
-  if (addToHistory) {
-    history.pushState({path}, "", path);
-  }
-}
-
-// SPA INIT com novo botão ENTRAR
-function initSPA() {
-  if (location.pathname === "/cadastro") {
-    renderCadastro();
-  } else if (location.pathname === "/login") {
-    renderLogin();
-  } else {
-    renderHome();
-  }
-  document.getElementById("register-link").addEventListener("click", function(e) {
-    e.preventDefault();
-    navigate("/cadastro");
-  });
-  document.querySelector(".btn-login").addEventListener("click", function(e) {
-    e.preventDefault();
-    navigate("/login");
-  });
-  document.getElementById("reload-home").addEventListener("click", function() {
-    navigate("/");
-  });
-  window.onpopstate = function(event) {
-    if (event.state && event.state.path) {
-      if (event.state.path === "/cadastro") renderCadastro();
-      else if (event.state.path === "/login") renderLogin();
-      else renderHome();
-    } else {
-      if (location.pathname === "/cadastro") renderCadastro();
-      else if (location.pathname === "/login") renderLogin();
-      else renderHome();
-    }
-  };
-}
-
-initSPA();
-
-function renderLogin() {
-  document.getElementById("search-area").style.display = ""; // mantém a barra de pesquisa
-  mainContent.innerHTML = `
-    <h1 class="login-title">ELENCOS CORINTHIANS - LOGIN / CADASTRO</h1>
-    <div class="login-cadastro-box">
-      <div class="login-col">
-        <div class="login-col-title">JÁ SOU CADASTRADO</div>
-        <form class="login-form" id="login-form">
-          <label for="login-email">E-MAIL</label>
-          <input type="email" id="login-email" name="login-email" placeholder="seu email" autocomplete="email" required>
-          <label for="login-password">SENHA</label>
-          <input type="password" id="login-password" name="login-password" placeholder="sua senha" autocomplete="current-password" required>
-          <a href="#" class="forgot-link">Não lembro minha senha</a>
-          <button type="submit" class="login-btn">LOGIN</button>
-        </form>
-      </div>
-      <div class="cadastro-col">
-        <div class="cadastro-col-title">AINDA NÃO ME CADASTREI</div>
-        <p>Faça parte do Elencos Corinthians e acompanhe o CORINTHIANS mais de perto.</p>
-        <button class="cadastro-btn-box" id="cadastro-btn-box">CADASTRO</button>
-      </div>
-    </div>
-  `;
-
-  document.getElementById("login-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    showToast("Login enviado! (exemplo de integração)");
-  });
-
-  document.getElementById("cadastro-btn-box").addEventListener("click", function() {
-    navigate("/cadastro");
-  });
-}
-
-function renderCadastro() {
-  document.getElementById("search-area").style.display = ""; // mantém a barra de pesquisa
-  mainContent.innerHTML = `
-    <div class="cadastro-container">
-      <h1 class="cadastro-title">Cadastre-se no Elencos Corinthians</h1>
-      <form class="cadastro-form" id="cadastro-form">
-        <label for="nome">Nome completo:</label>
-        <input type="text" id="nome" name="nome" required autocomplete="name">
-
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
-
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required autocomplete="new-password">
-
-        <button type="submit" class="cadastro-btn">Cadastrar</button>
-      </form>
-    </div>
-  `;
-  document.getElementById("cadastro-form").addEventListener("submit", function(e) {
-    e.preventDefault();
-    showToast("Cadastro enviado! (exemplo de integração)");
-  });
 }
 
 function renderCadastro() {
@@ -391,30 +294,108 @@ function renderCadastro() {
     }
   });
 
-  document.getElementById("cadastro-form").addEventListener("submit", function(e) {
+  document.getElementById("cadastro-form").addEventListener("submit", async function(e) {
     e.preventDefault();
-    showToast("Cadastro enviado! (exemplo de integração)");
+    const dados = {
+      nome: document.getElementById("nome").value,
+      data_nascimento: document.getElementById("nascimento").value,
+      genero: document.getElementById("genero").value,
+      email: document.getElementById("email").value,
+      apelido: document.getElementById("apelido").value,
+      cidade: document.getElementById("cidade").value,
+      senha: document.getElementById("senha").value,
+      foto_url: "", // implementar upload depois se quiser
+      receber_novidades: document.getElementById("novidades").checked
+    };
+    const resp = await fetch("http://localhost:3001/api/usuarios", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    });
+    const res = await resp.json();
+    showToast(res.message || res.error);
   });
 }
 
-document.getElementById("cadastro-form").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const dados = {
-    nome: document.getElementById("nome").value,
-    data_nascimento: document.getElementById("nascimento").value,
-    genero: document.getElementById("genero").value,
-    email: document.getElementById("email").value,
-    apelido: document.getElementById("apelido").value,
-    cidade: document.getElementById("cidade").value,
-    senha: document.getElementById("senha").value,
-    foto_url: "", // implementar upload depois se quiser
-    receber_novidades: document.getElementById("novidades").checked
-  };
-  const resp = await fetch("http://localhost:3001/api/usuarios", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dados)
+function renderLogin() {
+  document.getElementById("search-area").style.display = ""; // mantém a barra de pesquisa
+  mainContent.innerHTML = `
+    <h1 class="login-title">ELENCOS CORINTHIANS - LOGIN / CADASTRO</h1>
+    <div class="login-cadastro-box">
+      <div class="login-col">
+        <div class="login-col-title">JÁ SOU CADASTRADO</div>
+        <form class="login-form" id="login-form">
+          <label for="login-email">E-MAIL</label>
+          <input type="email" id="login-email" name="login-email" placeholder="seu email" autocomplete="email" required>
+          <label for="login-password">SENHA</label>
+          <input type="password" id="login-password" name="login-password" placeholder="sua senha" autocomplete="current-password" required>
+          <a href="#" class="forgot-link">Não lembro minha senha</a>
+          <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+      </div>
+      <div class="cadastro-col">
+        <div class="cadastro-col-title">AINDA NÃO ME CADASTREI</div>
+        <p>Faça parte do Elencos Corinthians e acompanhe o CORINTHIANS mais de perto.</p>
+        <button class="cadastro-btn-box" id="cadastro-btn-box">CADASTRO</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("login-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    showToast("Login enviado! (exemplo de integração)");
   });
-  const res = await resp.json();
-  showToast(res.message || res.error);
-});
+
+  document.getElementById("cadastro-btn-box").addEventListener("click", function() {
+    navigate("/cadastro");
+  });
+}
+
+// Roteamento SPA
+function navigate(path, addToHistory=true) {
+  if (path === "/" || path === "") {
+    renderHome();
+  } else if (path === "/cadastro") {
+    renderCadastro();
+  } else if (path === "/login") {
+    renderLogin();
+  }
+  if (addToHistory) {
+    history.pushState({path}, "", path);
+  }
+}
+
+// SPA INIT
+function initSPA() {
+  if (location.pathname === "/cadastro") {
+    renderCadastro();
+  } else if (location.pathname === "/login") {
+    renderLogin();
+  } else {
+    renderHome();
+  }
+  document.getElementById("register-link").addEventListener("click", function(e) {
+    e.preventDefault();
+    navigate("/cadastro");
+  });
+  document.querySelector(".btn-login").addEventListener("click", function(e) {
+    e.preventDefault();
+    navigate("/login");
+  });
+  document.getElementById("reload-home").addEventListener("click", function() {
+    navigate("/");
+  });
+  window.onpopstate = function(event) {
+    if (event.state && event.state.path) {
+      if (event.state.path === "/cadastro") renderCadastro();
+      else if (event.state.path === "/login") renderLogin();
+      else renderHome();
+    } else {
+      if (location.pathname === "/cadastro") renderCadastro();
+      else if (location.pathname === "/login") renderLogin();
+      else renderHome();
+    }
+  };
+}
+
+initSPA();
