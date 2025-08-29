@@ -333,11 +333,6 @@ function renderLogin() {
           <button type="submit" class="login-btn">LOGIN</button>
         </form>
       </div>
-      <div class="cadastro-col">
-        <div class="cadastro-col-title">AINDA NÃO ME CADASTREI</div>
-        <p>Faça parte do Elencos Corinthians e acompanhe o CORINTHIANS mais de perto.</p>
-        <button class="cadastro-btn-box" id="cadastro-btn-box">CADASTRO</button>
-      </div>
     </div>
   `;
 
