@@ -131,20 +131,25 @@ body {
   font-weight: bold;
   margin-bottom: 18px;
 }
+/* LISTA DE JOGADORES EM GRID (MULTICOLUNAS) */
 .elenco-lista ul {
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   text-align: left;
-  display: inline-block;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 4px 28px;
+  max-width: 100%;
 }
 .elenco-lista li {
   list-style: none;
-  margin: 6px 0;
+  margin: 4px 0;
   color: #fff;
   font-size: 1.1em;
   background: #181A1B;
   border-radius: 4px;
   padding: 4px 12px;
+  word-break: break-word;
 }
 .toast {
   position: fixed;
